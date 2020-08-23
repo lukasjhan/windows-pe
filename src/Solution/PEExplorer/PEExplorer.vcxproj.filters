@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="PE해석기">
+      <UniqueIdentifier>{56241e1a-7eef-4ea3-b430-756caaa24c8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="트리리스트뷰">
+      <UniqueIdentifier>{0b1230b3-5c69-478b-819e-46eda39c40e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="대화상자">
+      <UniqueIdentifier>{f06259cf-6cc5-4f06-aa54-e8264de09a0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="대화상자\리소스">
+      <UniqueIdentifier>{95b71b8c-20eb-4cbf-8a39-1ee495df72de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PEExplorer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PEAnals.h">
+      <Filter>PE해석기</Filter>
+    </ClInclude>
+    <ClInclude Include="PESchema.h">
+      <Filter>PE해석기</Filter>
+    </ClInclude>
+    <ClInclude Include="PEView.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeView.h">
+      <Filter>대화상자</Filter>
+    </ClInclude>
+    <ClInclude Include="DataView.h">
+      <Filter>대화상자</Filter>
+    </ClInclude>
+    <ClInclude Include="HexaView.h">
+      <Filter>대화상자</Filter>
+    </ClInclude>
+    <ClInclude Include="SecuView.h">
+      <Filter>대화상자</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeListView\TreeListCtrl.h">
+      <Filter>트리리스트뷰</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeListView\TreeListWnd.h">
+      <Filter>트리리스트뷰</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewAccelTbl.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewBitmap.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewDlg.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewMenu.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewStrTbl.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="ResrcDlgs\ResViewVerInfo.h">
+      <Filter>대화상자\리소스</Filter>
+    </ClInclude>
+    <ClInclude Include="FindItemDlg.h">
+      <Filter>대화상자</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PEExplorer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PESchema.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.Except.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.Text.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.Import.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.Resource.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnals.Sections.cpp">
+      <Filter>PE해석기</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeView.cpp">
+      <Filter>대화상자</Filter>
+    </ClCompile>
+    <ClCompile Include="DataView.cpp">
+      <Filter>대화상자</Filter>
+    </ClCompile>
+    <ClCompile Include="HexaView.cpp">
+      <Filter>대화상자</Filter>
+    </ClCompile>
+    <ClCompile Include="SecuView.cpp">
+      <Filter>대화상자</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeListView\TreeListCtrl.cpp">
+      <Filter>트리리스트뷰</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeListView\TreeListWnd.cpp">
+      <Filter>트리리스트뷰</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewAccelTbl.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewBitmap.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewDlg.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewMenu.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewStrTbl.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="ResrcDlgs\ResViewVerInfo.cpp">
+      <Filter>대화상자\리소스</Filter>
+    </ClCompile>
+    <ClCompile Include="FindItemDlg.cpp">
+      <Filter>대화상자</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PEExplorer.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\PEExplorer.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\PEExplorer.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\PEExplorer.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\PEFormat.xml">
+      <Filter>리소스 파일</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

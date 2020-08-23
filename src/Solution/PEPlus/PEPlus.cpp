@@ -1,0 +1,582 @@
+#include "stdafx.h"
+#include "PEPlus.h"
+#include "Shlwapi.h"
+
+
+PIMAGE_SECTION_HEADER PEPlus::FindSectHdr(PBYTE pImgBase, DWORD dwRVA)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (WORD i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		if (dwRVA >= pshs[i].VirtualAddress &&
+			dwRVA <  pshs[i].VirtualAddress + pshs[i].Misc.VirtualSize)
+			return &pshs[i];
+	}
+	return NULL;
+}
+
+PIMAGE_SECTION_HEADER PEPlus::FindSectHdrAndIdx(PBYTE pImgBase, DWORD dwRVA, short& nSectIdx)
+{
+	nSectIdx = -1;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (WORD i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		if (dwRVA >= pshs[i].VirtualAddress &&
+			dwRVA <  pshs[i].VirtualAddress + pshs[i].Misc.VirtualSize)
+		{
+			nSectIdx = (short)i;
+			return &pshs[i];
+		}
+	}
+	return NULL;
+}
+
+PIMAGE_SECTION_HEADER PEPlus::FindSectHdrOffset(PBYTE pImgBase, DWORD dwOffset)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (WORD i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		if (dwOffset >= pshs[i].PointerToRawData &&
+			dwOffset <  pshs[i].PointerToRawData + pshs[i].SizeOfRawData)
+			return &pshs[i];
+	}
+	return NULL;
+}
+
+PIMAGE_SECTION_HEADER PEPlus::FindSectHdr(PBYTE pImgBase, PSTR pszName)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (DWORD i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		char szName[9] = { 0, };
+		memcpy(szName, pshs[i].Name, IMAGE_SIZEOF_SHORT_NAME);
+		if (strcmp(szName, pszName) == 0)
+			return &pshs[i];
+	}
+	return NULL;
+}
+
+short PEPlus::GetSectionIdx(PBYTE pImgBase, DWORD dwRVA)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (short i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		if (dwRVA >= pshs[i].VirtualAddress &&
+			dwRVA <  pshs[i].VirtualAddress + pshs[i].Misc.VirtualSize)
+			return i;
+	}
+	return INVALID_SECT_IDX;
+}
+
+String PEPlus::GetSectionName(PIMAGE_SECTION_HEADER psh)
+{
+	USES_CONVERSION;
+	if (psh->Name[IMAGE_SIZEOF_SHORT_NAME - 1] != 0)
+	{
+		CHAR szName[IMAGE_SIZEOF_SHORT_NAME + 1];
+		memcpy(szName, psh->Name, IMAGE_SIZEOF_SHORT_NAME);
+		szName[IMAGE_SIZEOF_SHORT_NAME] = 0;
+		return A2CW(szName);
+	}
+	return A2CW((PSTR)psh->Name);
+}
+
+PIMAGE_SECTION_HEADER PEPlus::FindCodeSection(PBYTE pImgBase, WORD& wStartIdx)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	if (wStartIdx >= pnh->FileHeader.NumberOfSections)
+		return NULL;
+
+	for (; wStartIdx < pnh->FileHeader.NumberOfSections; wStartIdx++)
+	{
+		if (pshs[wStartIdx].Characteristics & IMAGE_SCN_CNT_CODE)
+			return &pshs[wStartIdx];
+	}
+	return NULL;
+}
+
+
+
+PIMAGE_PDB_INFO PEPlus::GetPdbInfo(PBYTE pImgBase, DWORD* pdwTimeStamp, bool bIsPE)
+{
+	PIMAGE_DATA_DIRECTORY pdd = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_DEBUG);
+	if (pdd->VirtualAddress == 0)
+		return NULL;
+
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdd->VirtualAddress);
+	PIMAGE_DEBUG_DIRECTORY pdbgs = PIMAGE_DEBUG_DIRECTORY(pImgBase + (
+		(bIsPE) ? RVA_TO_OFFSET(psh, pdd->VirtualAddress) : pdd->VirtualAddress));
+	int nItemCnt = pdd->Size / sizeof(IMAGE_DEBUG_DIRECTORY);
+	for (int i = 0; i < nItemCnt; i++)
+	{
+		PIMAGE_DEBUG_DIRECTORY pdbg = &pdbgs[i];
+		if (pdbg->Type == IMAGE_DEBUG_TYPE_CODEVIEW)
+		{
+			if (pdwTimeStamp != NULL)
+				*pdwTimeStamp = pdbg->TimeDateStamp;
+			return PIMAGE_PDB_INFO(pImgBase + (
+				(bIsPE) ? pdbg->PointerToRawData : pdbg->AddressOfRawData));
+		}
+	}
+	return NULL;
+}
+
+String PEPlus::GetPdbPath(PIMAGE_PDB_INFO ppdb, bool& bCached)
+{
+	CHAR szPdbPath[MAX_PATH];
+	PCSTR pszPdbFile = PCSTR(ppdb->PdbFileName);
+	if (PathIsFileSpecA(pszPdbFile))
+	{
+		GUID guid = *LPGUID(ppdb->Guid);
+		char szGuid[65];
+		int nChLen = sprintf_s(szGuid, "%08X%04X%04X", guid.Data1, guid.Data2, guid.Data3);
+		for (int j = 0; j < 8; j++)
+			nChLen += sprintf_s(szGuid + nChLen, 5, "%02X", guid.Data4[j]);
+		sprintf_s(szPdbPath, MAX_PATH, "%s\\%s%d\\%s", pszPdbFile, szGuid, ppdb->Age, pszPdbFile);
+		bCached = true;
+	}
+	else
+	{
+		sprintf_s(szPdbPath, MAX_PATH, "%s", pszPdbFile);
+		bCached = false;
+	}
+	USES_CONVERSION;
+	return A2CT(szPdbPath);
+}
+
+String PEPlus::GetPdbPath(PBYTE pImgBase, bool& bCached, PIMAGE_PDB_INFO* pppdb)
+{
+	PIMAGE_DATA_DIRECTORY pdd = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_DEBUG);
+	if (pdd->VirtualAddress == 0)
+		return L"";
+
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdd->VirtualAddress);
+	PIMAGE_DEBUG_DIRECTORY pdbgs = PIMAGE_DEBUG_DIRECTORY(pImgBase + RVA_TO_OFFSET(psh, pdd->VirtualAddress));
+
+	CHAR szPath[MAX_PATH];
+	int nItemCnt = pdd->Size / sizeof(IMAGE_DEBUG_DIRECTORY);
+	for (int i = 0; i < nItemCnt; i++)
+	{
+		PIMAGE_DEBUG_DIRECTORY pdbg = &pdbgs[i];
+		if (pdbg->Type == IMAGE_DEBUG_TYPE_CODEVIEW)
+		{
+			PIMAGE_PDB_INFO ppdb = PIMAGE_PDB_INFO(pImgBase + pdbg->PointerToRawData);
+			PCSTR pszPdbFile = PCSTR(ppdb->PdbFileName);
+			if (PathIsFileSpecA(pszPdbFile))
+			{
+				GUID guid = *LPGUID(ppdb->Guid);
+				char szGuid[65];
+				int nChLen = sprintf_s(szGuid, "%08X%04X%04X", guid.Data1, guid.Data2, guid.Data3);
+				for (int j = 0; j < 8; j++)
+					nChLen += sprintf_s(szGuid + nChLen, 5, "%02X", guid.Data4[j]);
+				sprintf_s(szPath, MAX_PATH, "%s\\%s%d\\%s", pszPdbFile, szGuid, ppdb->Age, pszPdbFile);
+				bCached = true;
+			}
+			else
+			{
+				sprintf_s(szPath, MAX_PATH, "%s", pszPdbFile);
+				bCached = false;
+			}
+			if (pppdb != NULL)
+				*pppdb = ppdb;
+		}
+	}
+	USES_CONVERSION;
+	return A2CT(szPath);
+}
+
+String PEPlus::RetrieveModuleName(HANDLE hFile)
+{
+	String szPath;
+	HANDLE hMapFile = NULL;
+	PBYTE  pMapView = NULL;
+	try
+	{
+		hMapFile = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
+		if (!hMapFile)
+			throw HRESULT_FROM_WIN32(GetLastError());
+		pMapView = (PBYTE)MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 0);
+		if (!pMapView)
+			throw HRESULT_FROM_WIN32(GetLastError());
+
+		PIMAGE_DATA_DIRECTORY pdd = PEPlus::GetDataDir(pMapView, IMAGE_DIRECTORY_ENTRY_EXPORT);
+		if (pdd == NULL)
+			throw E_INVALIDARG;
+		PIMAGE_SECTION_HEADER psh = PEPlus::FindSectHdr(pMapView, pdd->VirtualAddress);
+		if (psh == NULL)
+			throw E_INVALIDARG;
+
+		DWORD dwExpAddr = RVA_TO_OFFSET(psh, pdd->VirtualAddress);
+		PIMAGE_EXPORT_DIRECTORY ped = PIMAGE_EXPORT_DIRECTORY(pMapView + dwExpAddr);
+		PSTR lpszName = (PSTR)pMapView + RVA_TO_OFFSET(psh, ped->Name);
+		USES_CONVERSION;
+		szPath = A2T(lpszName);
+	}
+	catch (HRESULT)
+	{
+	}
+	if (pMapView != NULL)
+		UnmapViewOfFile(pMapView);
+	if (hMapFile != NULL)
+		CloseHandle(hMapFile);
+	return szPath;
+}
+
+#include <map>
+String PEPlus::GetModNameFromIAT(PBYTE pImgBase, DWORD dwRVA, bool* pbBound)
+{
+	bool bIs32 = Is32bitPE(pImgBase);
+	PIMAGE_DATA_DIRECTORY pdi = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_IMPORT);
+	if (pdi->VirtualAddress == 0)
+		return NULL;
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdi->VirtualAddress);
+	if (psh == NULL)
+		return NULL;
+
+	typedef std::map<DWORD, PIMAGE_IMPORT_DESCRIPTOR> IID_MAP;
+	IID_MAP idm;
+	PIMAGE_IMPORT_DESCRIPTOR pidItr = PIMAGE_IMPORT_DESCRIPTOR
+		(pImgBase + RVA_TO_OFFSET(psh, pdi->VirtualAddress));
+	for (; pidItr->FirstThunk > 0; pidItr++)
+		idm.insert(std::make_pair(pidItr->FirstThunk, pidItr));
+
+	PIMAGE_IMPORT_DESCRIPTOR pdiTrg = NULL;
+	IID_MAP::iterator it2;
+	for (IID_MAP::iterator it = idm.begin(); it != idm.end();)
+	{
+		it2 = it; it2++;
+		if (it2 == idm.end())
+		{
+			if (dwRVA >= it->first)
+				pdiTrg = it->second;
+			break;
+		}
+		if (dwRVA >= it->first && dwRVA < it2->first)
+		{
+			pdiTrg = it->second;
+			break;
+		}
+		it = it2;
+	}
+	if (pdiTrg == NULL)
+		return NULL;
+
+	USES_CONVERSION;
+	return A2CT((PCSTR)(pImgBase + RVA_TO_OFFSET(psh, pdiTrg->Name)));
+}
+
+String PEPlus::GetFuncNameFromIAT(PBYTE pImgBase, DWORD dwRVA)
+{
+	bool bIs32 = Is32bitPE(pImgBase);
+	PIMAGE_DATA_DIRECTORY pdt = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_IAT);
+	if (pdt->VirtualAddress == 0)
+		return NULL;
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdt->VirtualAddress);
+	if (psh == NULL)
+		return NULL;
+
+	PIMAGE_IMPORT_BY_NAME pin = NULL;
+	int    nOrdInal = -1;
+	UINT64 ulAddr = 0;
+	DWORD dwOffset = RVA_TO_OFFSET(psh, pdt->VirtualAddress) + (dwRVA - pdt->VirtualAddress);
+	if (Is32bitPE(pImgBase))
+	{
+		DWORD v = *((PDWORD)(pImgBase + dwOffset));
+		if (IMAGE_SNAP_BY_ORDINAL32(v))
+			nOrdInal = (WORD)IMAGE_ORDINAL32(v);
+		else
+			pin = PIMAGE_IMPORT_BY_NAME(pImgBase + RVA_TO_OFFSET(psh, v));
+	}
+	else
+	{
+		ULONGLONG v = *((PULONGLONG)(pImgBase + dwOffset));
+		if (IMAGE_SNAP_BY_ORDINAL64(v))
+			nOrdInal = (WORD)IMAGE_ORDINAL64(v);
+		else
+			pin = PIMAGE_IMPORT_BY_NAME(pImgBase + RVA_TO_OFFSET(psh, (DWORD)v));
+	}
+
+	String sz; USES_CONVERSION;
+	if (nOrdInal < 0)
+		sz = A2CT(pin->Name);
+	else
+		sz.Format(L"Ordinals[%d]", nOrdInal);
+	return sz;
+}
+
+int PEPlus::BaseRelocation(PBYTE pImgBase, DWORD64 llNewBase)
+{
+	PIMAGE_DOS_HEADER pdh = (PIMAGE_DOS_HEADER)pImgBase;
+	if (pdh->e_magic != IMAGE_DOS_SIGNATURE)
+		return -1;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)(pImgBase + pdh->e_lfanew);
+	if (pnh->Signature != IMAGE_NT_SIGNATURE)
+		return -1;
+
+	bool bIs32Bit = Is32bitPE(pImgBase);
+	if (bIs32Bit && llNewBase > 0x7FFFFFFF)
+		return -1;
+
+	PIMAGE_DATA_DIRECTORY pdd = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_BASERELOC);
+	if (!pdd->VirtualAddress)
+		return 0;
+
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdd->VirtualAddress);
+	if (psh == NULL)
+		return 0;
+
+	INT64	nDelta = (INT64)(llNewBase - GetImageBase(pImgBase));
+	int		nSize = 0, i = 0, nRelocTotal = 0;
+	PBYTE	pbrs = pImgBase + RVA_TO_OFFSET(psh, pdd->VirtualAddress);
+	for (; nSize < (int)pdd->Size; i++)
+	{
+		PIMAGE_BASE_RELOCATION pbr = (PIMAGE_BASE_RELOCATION)pbrs;
+		pbrs += sizeof(IMAGE_BASE_RELOCATION);
+		nSize += sizeof(IMAGE_BASE_RELOCATION);
+
+		if (pbr->SizeOfBlock == 0)
+			continue;
+		psh = PEPlus::FindSectHdr(pImgBase, pbr->VirtualAddress);
+		if (psh == NULL)
+			continue;
+
+		int nRelocCnt = (int)((pbr->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(WORD));
+		PWORD pwRelcs = (PWORD)pbrs;
+		for (int j = 0; j < nRelocCnt; j++)
+		{
+			WORD wType = (pwRelcs[j] & 0xF000) >> 12;
+			WORD wOffs =  pwRelcs[j] & 0x0FFF;
+			if (wType != IMAGE_REL_BASED_HIGHLOW && wType != IMAGE_REL_BASED_DIR64)
+				continue;
+
+			DWORD dwRlcRva = pbr->VirtualAddress + wOffs;
+			DWORD dwRlcOff = RVA_TO_OFFSET(psh, dwRlcRva);
+			if (wType == IMAGE_REL_BASED_HIGHLOW)
+			{
+				DWORD dwAddr = *((PDWORD)(pImgBase + dwRlcOff));
+				dwAddr += (INT)nDelta;
+				*((PDWORD)(pImgBase + dwRlcOff)) = dwAddr;
+			}
+			else
+			{
+				DWORD64 llAddr = *((PDWORD64)(pImgBase + dwRlcOff));
+				llAddr += nDelta;
+				*((PDWORD64)(pImgBase + dwRlcOff)) = llAddr;
+			}
+			nRelocTotal++;
+		}
+		pbrs += sizeof(WORD) * nRelocCnt;
+	}
+	if (Is32bitPE(pImgBase))
+	{
+		PIMAGE_OPTIONAL_HEADER32 poh = GetOptHdr32(pImgBase);
+		poh->DllCharacteristics &= ~IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
+		poh->ImageBase += (INT)nDelta;
+	}
+	else
+	{
+		PIMAGE_OPTIONAL_HEADER64 poh = GetOptHdr64(pImgBase);
+		poh->DllCharacteristics &= ~IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
+		poh->ImageBase += nDelta;
+	}
+
+	return nRelocTotal;
+}
+
+FARPROC PEPlus::GetFuncPtrFromModule(HINSTANCE hMod, PCSTR pszSymbol)
+{
+	PBYTE pImgBase = (PBYTE)hMod;
+	if (!pImgBase)
+		return NULL;
+
+	PIMAGE_DOS_HEADER pdh = (PIMAGE_DOS_HEADER)pImgBase;
+	if (pdh->e_magic != IMAGE_DOS_SIGNATURE)
+		return NULL;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)(pImgBase + pdh->e_lfanew);
+	if (pnh->Signature != IMAGE_NT_SIGNATURE)
+		return NULL;
+
+	PIMAGE_DATA_DIRECTORY pdd = &pnh->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+	PIMAGE_EXPORT_DIRECTORY ped = (PIMAGE_EXPORT_DIRECTORY)(pImgBase + pdd->VirtualAddress);
+
+	DWORD	dwFuncIdx = 0;
+	PDWORD	pFuncTbl = (PDWORD)(pImgBase + ped->AddressOfFunctions);
+	PWORD	pOrdnTbl = (PWORD)(pImgBase + ped->AddressOfNameOrdinals);
+	if ((DWORD_PTR)pszSymbol <= 0xFFFF)
+	{
+		WORD wOrdinal = (WORD)IMAGE_ORDINAL((DWORD_PTR)pszSymbol);
+		wOrdinal -= (WORD)ped->Base;
+		if (wOrdinal < ped->NumberOfFunctions)
+			return (FARPROC)(pImgBase + pFuncTbl[wOrdinal]);
+	}
+	else
+	{
+		PDWORD pFuncNameTbl = (PDWORD)(pImgBase + ped->AddressOfNames);
+		for (; dwFuncIdx < ped->NumberOfNames; dwFuncIdx++)
+		{
+			PCSTR pFuncName = (PCSTR)(pImgBase + pFuncNameTbl[dwFuncIdx]);
+			if (strcmp(pszSymbol, pFuncName) == 0)
+			{
+				WORD wOrdinal = pOrdnTbl[dwFuncIdx];
+				return (FARPROC)(pImgBase + pFuncTbl[wOrdinal]);
+			}
+		}
+	}
+	SetLastError(ERROR_PROC_NOT_FOUND);
+	return NULL;
+}
+
+bool PEPlus::SetFuncPtrToIAT(PCSTR pszRepDllName, FARPROC pfnCurFunc, FARPROC pfnNewFunc, HINSTANCE hModInst)
+{
+	PBYTE pImgBase = (PBYTE)hModInst;
+	if (!pImgBase)
+		return false;
+	PIMAGE_DOS_HEADER pdh = (PIMAGE_DOS_HEADER)pImgBase;
+	if (pdh->e_magic != IMAGE_DOS_SIGNATURE)
+		return false;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)(pImgBase + pdh->e_lfanew);
+	if (pnh->Signature != IMAGE_NT_SIGNATURE)
+		return false;
+
+	PIMAGE_DATA_DIRECTORY pdd = &pnh->
+		OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
+	PIMAGE_IMPORT_DESCRIPTOR pid =
+		(PIMAGE_IMPORT_DESCRIPTOR)(pImgBase + pdd->VirtualAddress);
+	for (; pid->Name; pid++)
+	{
+		PSTR pszModName = (PSTR)(pImgBase + pid->Name);
+		if (!_strcmpi(pszModName, pszRepDllName))
+			break;
+	}
+	if (!pid->Name)
+		return false;
+
+	PIMAGE_THUNK_DATA pThunk = (PIMAGE_THUNK_DATA)(pImgBase + pid->FirstThunk);
+	for (; pThunk->u1.Function; pThunk++)
+	{
+		FARPROC* ppfn = (FARPROC*)&pThunk->u1.Function;
+		if (*ppfn == pfnCurFunc)
+		{
+			*ppfn = pfnNewFunc;
+			return true;
+		}
+	}
+	return false;
+}
+
+PBYTE PEPlus::FindPEResource(DWORD& dwSize, PBYTE pImgBase, PCWSTR pszName, PCWSTR pszType, WORD wLang)
+{
+	PIMAGE_DOS_HEADER pdh = (PIMAGE_DOS_HEADER)pImgBase;
+	if (pdh->e_magic != IMAGE_DOS_SIGNATURE)
+		return NULL;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)(pImgBase + pdh->e_lfanew);
+	if (pnh->Signature != IMAGE_NT_SIGNATURE)
+		return NULL;
+
+	PIMAGE_DATA_DIRECTORY pdd = GetDataDir(pImgBase, IMAGE_DIRECTORY_ENTRY_RESOURCE);
+	if (pdd->VirtualAddress == 0)
+		return NULL;
+	PIMAGE_SECTION_HEADER psh = FindSectHdr(pImgBase, pdd->VirtualAddress);
+	if (psh == NULL)
+		return NULL;
+
+	if (wLang == MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
+		wLang = GetUserDefaultLangID();
+
+	PBYTE pResSect = pImgBase + RVA_TO_OFFSET(psh, pdd->VirtualAddress);
+	DWORD dwDirOff = 0;
+	int	  nLevel   = 0;
+	for (; nLevel < 3; nLevel++)
+	{
+		PBYTE pIter = pResSect + dwDirOff;
+		PIMAGE_RESOURCE_DIRECTORY prd = (PIMAGE_RESOURCE_DIRECTORY)pIter;
+		pIter += sizeof(IMAGE_RESOURCE_DIRECTORY);
+
+		WORD wId = 0; PCWSTR pszId = NULL;
+		bool bChkStr = false;
+		switch (nLevel)
+		{
+			case 0: 
+				bChkStr = (pszType > RT_MANIFEST);
+				if (bChkStr)
+					pszId = pszType;
+				else
+					wId = (WORD)pszType;
+				break;
+			case 1: 
+				bChkStr = (pszName > (PCWSTR)USHRT_MAX);
+				if (bChkStr)
+					pszId = pszName;
+				else
+					wId = (WORD)pszName;
+				break;
+			case 2:
+				bChkStr = false;
+				wId = wLang;
+				break;
+		}
+		WORD wEntCnt = (bChkStr) ? prd->NumberOfNamedEntries : prd->NumberOfIdEntries;
+		if (!bChkStr)
+			pIter += sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY) * prd->NumberOfNamedEntries;
+
+		PIMAGE_RESOURCE_DIRECTORY_ENTRY prdet = NULL;
+		for (WORD i = 0; i < wEntCnt; i++)
+		{
+			PIMAGE_RESOURCE_DIRECTORY_ENTRY prde = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)pIter;
+			pIter += sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
+
+			if (prde->NameIsString)
+			{
+				if (!bChkStr) break;
+
+				DWORD dwStrOff = psh->PointerToRawData + prde->NameOffset;
+				PIMAGE_RESOURCE_DIR_STRING_U prds = (PIMAGE_RESOURCE_DIR_STRING_U)(pImgBase + dwStrOff);
+				if (wcsncmp(pszId, (PCWSTR)prds->NameString, prds->Length) == 0)
+				{
+					prdet = prde;
+					break;
+				}
+			}
+			else
+			{
+				if (bChkStr) break;
+
+				if (wId == prde->Id || (nLevel == 2 && wId == 0xFFFF))
+				{
+					prdet = prde;
+					break;
+				}
+			}
+		}
+		if (prdet == NULL)
+			break;
+		dwDirOff = prdet->OffsetToDirectory;
+	}
+	if (nLevel < 3)
+		return NULL;
+
+	PIMAGE_RESOURCE_DATA_ENTRY pdata = (PIMAGE_RESOURCE_DATA_ENTRY)(pResSect + dwDirOff);
+	dwSize = pdata->Size;
+	return (pImgBase + RVA_TO_OFFSET(psh, pdata->OffsetToData));
+}
+
+DWORD PEPlus::CalcSizeOfPEImage(PBYTE pImgBase)
+{
+	DWORD dwImgSize = 0;
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	PIMAGE_SECTION_HEADER pshs = IMAGE_FIRST_SECTION(pnh);
+	for (WORD i = 0; i < pnh->FileHeader.NumberOfSections; i++)
+	{
+		dwImgSize += ROUND_UP(pshs[i].Misc.VirtualSize,
+			pnh->OptionalHeader.SectionAlignment);
+	}
+	dwImgSize += ROUND_UP(pnh->OptionalHeader.SizeOfHeaders,
+		pnh->OptionalHeader.SectionAlignment);
+	return dwImgSize;
+}

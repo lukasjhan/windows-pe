@@ -1,0 +1,22 @@
+#include "Windows.h"
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Dialog
+IDD_DLG_MAIN DIALOG 100, 100, 162, 65
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Dialog Resource Sample"
+CLASS	"DLG_APP_CLS"
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,106,44,50,14
+    EDITTEXT        IDC_EDT_SAMPLE,30,7,126,31,ES_MULTILINE | ES_AUTOVSCROLL |ES_READONLY
+    ICON            "DlgApp.Icon",IDC_STC_ICON,7,7,20,20,SS_SUNKEN
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Icon
+DLGAPP.ICON             ICON                    "DlgApp.ico"
+/////////////////////////////////////////////////////////////////////////////

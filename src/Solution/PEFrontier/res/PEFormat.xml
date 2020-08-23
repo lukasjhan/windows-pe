@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileFormat name="PE">
+	<EnumList>
+		<Enum name="OS_SIGNATURE" type="DWORD">
+			<Item name="OS2_SIGNATURE" value="0x454E" desc="NE"/>
+			<Item name="VXD_SIGNATURE" value="0x454C" desc="LE"/>
+			<Item name="NT_SIGNATURE(PE00)" value="0x00004550" desc="PE00"/>
+		</Enum>
+		<Enum name="OS_MACHINE" type="WORD">
+			<Item name="I386" value="0x014c" desc="x86"/>
+			<Item name="IA64" value="0x0200" desc="Intel Itanium"/>
+			<Item name="AMD64" value="0x8664" desc="x64"/>
+		</Enum>
+		<Enum name="OS_MAGIC" type="WORD">
+			<Item name="HDR32_MAGIC" value="0x10b" desc="32Bit PE"/>
+			<Item name="HDR64_MAGIC" value="0x20b" desc="64Bit PE"/>
+			<Item name="ROM_HDR_MAGIC" value="0x107" desc="ROM 이미지"/>
+		</Enum>
+		<Enum name="OS_CHARACTERISTICS" type="WORD" flags="true">
+			<Item name="RELOCS_STRIPPED" value="0x0001" desc="Relocation info stripped from file."/>
+			<Item name="EXECUTABLE_IMAGE" value="0x0002" desc="File is executable(i.e. no unresolved externel references)."/>
+			<Item name="LINE_NUMS_STRIPPED	" value="0x0004" desc="Line numbers stripped from file."/>
+			<Item name="LOCAL_SYMS_STRIPPED" value="0x0008" desc="Local symbols stripped from file."/>
+			<Item name="AGGRESIVE_WS_TRIM" value="0x0010" desc="Aggressively trim working set"/>
+			<Item name="LARGE_ADDRESS_AWARE" value="0x0020" desc="App can handle >2gb addresses"/>
+			<Item name="BYTES_REVERSED_LO" value="0x0040" desc="App can handle >2gb addresses"/>
+			<Item name="BYTES_REVERSED_LO" value="0x0080" desc="Bytes of machine word are reversed."/>
+			<Item name="32BIT_MACHINE" value="0x0100" desc="32 bit word machine."/>
+			<Item name="DEBUG_STRIPPED" value="0x0200" desc="Debugging info stripped from file in .DBG file."/>
+			<Item name="REMOVABLE_RUN_FROM_SWAP" value="0x0400" desc="If Image is on removable media, copy and run from the swap file."/>
+			<Item name="NET_RUN_FROM_SWAP" value="0x0800" desc="If Image is on Net, copy and run from the swap file."/>
+			<Item name="SYSTEM" value="0x1000" desc="System File."/>
+			<Item name="DLL" value="0x2000" desc="File is a DLL."/>
+			<Item name="UP_SYSTEM_ONLY" value="0x4000" desc="File should only be run on a UP machine."/>
+			<Item name="BYTES_REVERSED_HI" value="0x8000" desc="Bytes of machine word are reversed."/>
+		</Enum>
+		<Enum name="IMAGE_SUBSYSTEM" type="WORD">
+			<Item name="UNKNOWN" value="0" desc="Unknown subsystem."/>
+			<Item name="NATIVE" value="1" desc="Image doesn't require a subsystem."/>
+			<Item name="WINDOWS_GUI" value="2" desc="Image runs in the Windows GUI subsystem."/>
+			<Item name="WINDOWS_CUI" value="3" desc="Image runs in the Windows character subsystem."/>
+			<Item name="OS2_CUI" value="5" desc="Image runs in the OS/2 character subsystem."/>
+			<Item name="POSIX_CUI" value="7" desc="Image runs in the Posix character subsystem."/>
+			<Item name="NATIVE_WINDOWS" value="8" desc="Image is a native Win9x driver."/>
+			<Item name="WINDOWS_CE_GUI" value="9" desc="Image runs in the Windows CE subsystem."/>
+			<Item name="EFI_APPLICATION" value="10" desc=""/>
+			<Item name="EFI_BOOT_SERVICE_DRIVER" value="11" desc=""/>
+			<Item name="EFI_RUNTIME_DRIVER" value="12" desc=""/>
+			<Item name="EFI_ROM" value="13" desc=""/>
+			<Item name="XBOX" value="14" desc=""/>
+			<Item name="WINDOWS_BOOT_APPLICATION" value="16" desc=""/>
+		</Enum>
+		<Enum name="IMAGE_DLLCHARACTERISTICS" type="WORD" flags="true">
+			<Item name="DYNAMIC_BASE" value="0x0040" desc="DLL can move."/>
+			<Item name="FORCE_INTEGRITY" value="0x0080" desc="Code Integrity Image"/>
+			<Item name="NX_COMPAT" value="0x0100" desc="Image is NX compatible"/>
+			<Item name="NO_ISOLATION" value="0x0200" desc="Image understands isolation and doesn't want it"/>
+			<Item name="NO_SEH" value="0x0400" desc="Image does not use SEH.  No SE handler may reside in this image"/>
+			<Item name="NO_BIND" value="0x0800" desc="Do not bind this image."/>
+			<Item name="WDM_DRIVER" value="0x2000" desc="Driver uses WDM model"/>
+			<Item name="TERMINAL_SERVER_AWARE" value="0x8000" desc="Termianl service aware"/>
+		</Enum>
+		<Enum name="IMAGE_DIRECTORY_ENTRY" type="BYTE">
+			<Item name="EXPORT" value="0" desc="Export Directory"/>
+			<Item name="IMPORT" value="1" desc="Import Directory"/>
+			<Item name="RESOURCE" value="2" desc="Resource Directory"/>
+			<Item name="EXCEPTION" value="3" desc="Exception Directory"/>
+			<Item name="SECURITY" value="4" desc="Security Directory"/>
+			<Item name="BASERELOC" value="5" desc="Base Relocation Table"/>
+			<Item name="DEBUG" value="6" desc="Debug Directory"/>
+			<Item name="ARCHITECTURE" value="7" desc="Architecture Specific Data"/>
+			<Item name="GLOBALPTR" value="8" desc="RVA of GP"/>
+			<Item name="TLS" value="9" desc="TLS Directory"/>
+			<Item name="LOAD_CONFIG" value="10" desc="Load Configuration Directory"/>
+			<Item name="BOUND_IMPORT" value="11" desc="Bound Import Directory in headers"/>
+			<Item name="IAT" value="12" desc="Import Address Table"/>
+			<Item name="DELAY_IMPORT" value="13" desc="Delay Load Import Descriptors"/>
+			<Item name="COM_DESCRIPTOR" value="14" desc="COM Runtime descriptor"/>
+			<Item name="TERMINATER" value="15" desc="COM Runtime descriptor"/>
+		</Enum>
+		<Enum name="IMAGE_SCN_CHARACTERISTICS" type="DWORD" flags="true">
+			<Item name="CNT_CODE" value="0x00000020" desc="Section contains code."/>
+			<Item name="CNT_INITIALIZED_DATA" value="0x00000040" desc="Section contains initialized data."/>
+			<Item name="CNT_UNINITIALIZED_DATA" value="0x00000080" desc="Section contains uninitialized data."/>
+			<Item name="MEM_DISCARDABLE" value="0x02000000" desc="Section can be discarded."/>
+			<Item name="MEM_NOT_CACHED" value="0x04000000" desc="Section is not cachable."/>
+			<Item name="MEM_NOT_PAGED" value="0x08000000" desc="Section is not pageable."/>
+			<Item name="MEM_SHARED" value="0x10000000" desc="Section is shareable."/>
+			<Item name="MEM_EXECUTE" value="0x20000000" desc="Section is executable."/>
+			<Item name="MEM_READ" value="0x40000000" desc="Section is readable."/>
+			<Item name="MEM_WRITE" value="0x80000000" desc="Section is writeable."/>
+		</Enum>
+		<Enum name="IMAGE_DEBUG_TYPE" type="DWORD">
+			<Item name="DEBUG_TYPE_UNKNOWN" value="0"/>
+			<Item name="COFF" value="1"/>
+			<Item name="CODEVIEW" value="2"/>
+			<Item name="FPO" value="3"/>
+			<Item name="MISC" value="4"/>
+			<Item name="EXCEPTION" value="5"/>
+			<Item name="FIXUP" value="6"/>
+			<Item name="OMAP_TO_SRC" value="7"/>
+			<Item name="OMAP_FROM_SRC" value="8"/>
+			<Item name="BORLAND" value="9"/>
+			<Item name="RESERVED10" value="10"/>
+			<Item name="CLSID" value="11"/>
+			<Item name="FEATURE" value="12"/>
+		</Enum>
+		<Enum name="UNW_FLAG_TYPE" type="BYTE" flags="true">
+			<Item name="No Handler" value="0"/>
+			<Item name="Exception Handler" value="1"/>
+			<Item name="Termination Handler" value="2"/>
+			<Item name="Chained Info" value="4"/>
+		</Enum>
+	</EnumList>
+	<StructList>
+		<Struct name="IMAGE_DOS_HEADER">
+			<Member name="e_magic" type="WORD" info="MZ"/>
+			<Member name="e_cblp" type="WORD"/>
+			<Member name="e_cp" type="WORD"/>
+			<Member name="e_crlc" type="WORD"/>
+			<Member name="e_cparhdr" type="WORD"/>
+			<Member name="e_minalloc" type="WORD"/>
+			<Member name="e_maxalloc" type="WORD"/>
+			<Member name="e_ss" type="WORD"/>
+			<Member name="e_sp" type="WORD"/>
+			<Member name="e_csum" type="WORD"/>
+			<Member name="e_ip" type="WORD"/>
+			<Member name="e_cs" type="WORD"/>
+			<Member name="e_lfarlc" type="WORD"/>
+			<Member name="e_ovno" type="WORD"/>
+			<Member name="e_res" type="WORD[4]"/>
+			<Member name="e_oemid" type="WORD"/>
+			<Member name="e_oeminfo" type="WORD"/>
+			<Member name="e_res2" type="WORD[10]"/>
+			<Member name="e_lfanew" type="DWORD" info="Pointer to IMAGE_NT_HEADERS"/>
+		</Struct>
+		<Struct name="IMAGE_FILE_HEADER">
+			<Member name="Machine" type="WORD" enum="OS_MACHINE"/>
+			<Member name="NumberOfSections" type="WORD"/>
+			<Member name="TimeDateStamp" type="DWORD" time="true"/>
+			<Member name="PointerToSymbolTable" type="DWORD"/>
+			<Member name="NumberOfSymbols" type="DWORD"/>
+			<Member name="SizeOfOptionalHeader" type="WORD" info="sizeof(IMAGE_OPTIONAL_HEADER)"/>
+			<Member name="Characteristics" type="WORD" enum="OS_CHARACTERISTICS"/>
+		</Struct>
+		<Struct name="IMAGE_DATA_DIRECTORY">
+			<Member name="VirtualAddress" type="DWORD" rva="Section:BYTE[5]"/>
+			<Member name="Size" type="DWORD"/>
+		</Struct>
+		<Struct name="IMAGE_OPTIONAL_HEADER32">
+			<Member name="Magic" type="WORD" enum="OS_MAGIC"/>
+			<Member name="MajorLinkerVersion" type="BYTE"/>
+			<Member name="MinorLinkerVersion" type="BYTE"/>
+			<Member name="SizeOfCode" type="DWORD"/>
+			<Member name="SizeOfInitializedData" type="DWORD"/>
+			<Member name="SizeOfUninitializedData" type="DWORD"/>
+			<Member name="AddressOfEntryPoint" type="DWORD" rva="EntryPoint:BYTE[5]"/>
+			<Member name="BaseOfCode" type="DWORD"/>
+			<Member name="BaseOfData" type="DWORD"/>
+			<Member name="ImageBase" type="DWORD"/>
+			<Member name="SectionAlignment" type="DWORD"/>
+			<Member name="FileAlignment" type="DWORD"/>
+			<Member name="MajorOperatingSystemVersion" type="WORD"/>
+			<Member name="MinorOperatingSystemVersion" type="WORD"/>
+			<Member name="MajorImageVersion" type="WORD"/>
+			<Member name="MinorImageVersion" type="WORD"/>
+			<Member name="MajorSubsystemVersion" type="WORD"/>
+			<Member name="MinorSubsystemVersion" type="WORD"/>
+			<Member name="Win32VersionValue " type="DWORD"/>
+			<Member name="SizeOfImage" type="DWORD"/>
+			<Member name="SizeOfHeaders" type="DWORD"/>
+			<Member name="CheckSum" type="DWORD"/>
+			<Member name="Subsystem" type="WORD" enum="IMAGE_SUBSYSTEM"/>
+			<Member name="DllCharacteristics" type="WORD" enum="IMAGE_DLLCHARACTERISTICS"/>
+			<Member name="SizeOfStackReserve" type="DWORD"/>
+			<Member name="SizeOfStackCommit" type="DWORD"/>
+			<Member name="SizeOfHeapReserve" type="DWORD"/>
+			<Member name="SizeOfHeapCommit" type="DWORD"/>
+			<Member name="LoaderFlags" type="DWORD"/>
+			<Member name="NumberOfRvaAndSizes" type="DWORD"/>
+			<Member name="DataDirectory" type="IMAGE_DATA_DIRECTORY[16]"/>
+		</Struct>
+		<Struct name="IMAGE_OPTIONAL_HEADER64">
+			<Member name="Magic" type="WORD" enum="OS_MAGIC"/>
+			<Member name="MajorLinkerVersion" type="BYTE"/>
+			<Member name="MinorLinkerVersion" type="BYTE"/>
+			<Member name="SizeOfCode" type="DWORD"/>
+			<Member name="SizeOfInitializedData" type="DWORD"/>
+			<Member name="SizeOfUninitializedData" type="DWORD"/>
+			<Member name="AddressOfEntryPoint" type="DWORD" rva="EntryPoint:BYTE[5]"/>
+			<Member name="BaseOfCode" type="DWORD"/>
+			<Member name="ImageBase" type="ULONGLONG"/>
+			<Member name="SectionAlignment" type="DWORD"/>
+			<Member name="FileAlignment" type="DWORD"/>
+			<Member name="MajorOperatingSystemVersion" type="WORD"/>
+			<Member name="MinorOperatingSystemVersion" type="WORD"/>
+			<Member name="MajorImageVersion" type="WORD"/>
+			<Member name="MinorImageVersion" type="WORD"/>
+			<Member name="MajorSubsystemVersion" type="WORD"/>
+			<Member name="MinorSubsystemVersion" type="WORD"/>
+			<Member name="Win32VersionValue " type="DWORD"/>
+			<Member name="SizeOfImage" type="DWORD"/>
+			<Member name="SizeOfHeaders" type="DWORD"/>
+			<Member name="CheckSum" type="DWORD"/>
+			<Member name="Subsystem" type="WORD" enum="IMAGE_SUBSYSTEM"/>
+			<Member name="DllCharacteristics" type="WORD" enum="IMAGE_DLLCHARACTERISTICS"/>
+			<Member name="SizeOfStackReserve" type="ULONGLONG"/>
+			<Member name="SizeOfStackCommit" type="ULONGLONG"/>
+			<Member name="SizeOfHeapReserve" type="ULONGLONG"/>
+			<Member name="SizeOfHeapCommit" type="ULONGLONG"/>
+			<Member name="LoaderFlags" type="DWORD"/>
+			<Member name="NumberOfRvaAndSizes" type="DWORD"/>
+			<Member name="DataDirectories" type="IMAGE_DATA_DIRECTORY[16]" enum="IMAGE_DIRECTORY_ENTRY"/>
+		</Struct>
+		<Struct name="IMAGE_NT_HEADERS32">
+			<Member name="Signature" type="DWORD" enum="OS_SIGNATURE"/>
+			<Member name="FileHeader" type="IMAGE_FILE_HEADER"/>
+			<Member name="OptionalHeader" type="IMAGE_OPTIONAL_HEADER32"/>
+		</Struct>
+		<Struct name="IMAGE_NT_HEADERS64">
+			<Member name="Signature" type="DWORD" enum="OS_SIGNATURE"/>
+			<Member name="FileHeader" type="IMAGE_FILE_HEADER"/>
+			<Member name="OptionalHeader" type="IMAGE_OPTIONAL_HEADER64"/>
+		</Struct>
+		<Struct name="IMAGE_EXPORT_DIRECTORY">
+			<Member name="Characteristics" type="DWORD"/>
+			<Member name="TimeDateStamp" type="DWORD" time="true"/>
+			<Member name="MajorVersion" type="WORD"/>
+			<Member name="MinorVersion" type="WORD"/>
+			<Member name="Name" type="DWORD" rva="true"/>
+			<Member name="Base" type="DWORD"/>
+			<Member name="NumberOfFunctions" type="DWORD"/>
+			<Member name="NumberOfNames" type="DWORD"/>
+			<Member name="AddressOfFunctions" type="DWORD" rva="Functions:DWORD[0]"/>
+			<Member name="AddressOfNames" type="DWORD" rva="Names:DWORD[0]"/>
+			<Member name="AddressOfNameOrdinals" type="DWORD" rva="Ordinals:DWORD[0]"/>
+		</Struct>
+		<Struct name="IMAGE_IMPORT_DESCRIPTOR">
+			<Member name="OriginalFirstThunk" type="DWORD" rva="OriginalThunk:ULONGLONG[0]"/>
+			<Member name="TimeDateStamp" type="DWORD"/>
+			<Member name="ForwarderChain" type="DWORD"/>
+			<Member name="Name" type="DWORD" rva="FunctionName:BYTE[0]:string"/>
+			<Member name="FirstThunk" type="DWORD" rva="FirstThunk:ULONGLONG[0]"/>
+		</Struct>
+		<Struct name="IMAGE_THUNK_DATA32">
+			<Member name="AddressOfData" type="DWORD"/>
+		</Struct>
+		<Struct name="IMAGE_THUNK_DATA64">
+			<Member name="AddressOfData" type="ULONGLONG"/>
+		</Struct>
+		<Struct name="IMAGE_IMPORT_BY_NAME">
+			<Member name="Hint" type="WORD"/>
+			<Member name="Name" type="BYTE[0]" string="true"/>
+		</Struct>
+		<Struct name="IMAGE_PDB_INFO">
+		  <Member name="Signature" type="DWORD"/>
+		  <Member name="Guid" type="BYTE[16]" guid="true"/>
+		  <Member name="Age" type="DWORD"/>
+		  <Member name="PdbFileName" type="BYTE[0]" string="true"/>
+		</Struct>
+		<Struct name="IMAGE_FEATURE_INFO">
+		  <Member name="PreCompiler" type="DWORD"/>
+		  <Member name="Compiler" type="DWORD"/>
+		  <Member name="GS" type="DWORD"/>
+		  <Member name="SDL" type="DWORD"/>
+		  <Member name="Unknown" type="DWORD"/>
+		</Struct>
+		<Struct name="IMAGE_DEBUG_DIRECTORY">
+		  <Member name="Characteristics" type="DWORD"/>
+		  <Member name="TimeDateStamp" type="DWORD" time="true"/>
+		  <Member name="MajorVersion" type="WORD"/>
+		  <Member name="MinorVersion" type="WORD"/>
+		  <Member name="Type" type="DWORD" enum="IMAGE_DEBUG_TYPE"/>
+		  <Member name="SizeOfData" type="DWORD"/>
+		  <Member name="AddressOfRawData" type="DWORD" rva="true"/>
+		  <Member name="PointerToRawData" type="DWORD"/>
+		</Struct>
+		<Struct name="UNWIND_CODE">
+			<Member name="CodeOffset" type="BYTE"/>
+			<Member name="UnwindOp" type="BYTE:4"/>
+			<Member name="OpInfo" type="BYTE:4"/>
+		</Struct>
+		<Struct name="UNWIND_INFO">
+			<Member name="Version" type="BYTE:3"/>
+			<Member name="Flags" type="BYTE:5" enum="UNW_FLAG_TYPE"/>-->
+			<Member name="SizeOfProlog" type="BYTE"/>
+			<Member name="CountOfCodes" type="BYTE"/>
+			<Member name="FrameRegister" type="BYTE:4"/>
+			<Member name="FrameOffset" type="BYTE:4"/>
+		</Struct>
+		<Struct name="C_SCOPE_TABLE_ENTRY">
+		  <Member name="Begin" type="DWORD" rva="true"/>
+		  <Member name="End" type="DWORD" rva="true"/>
+		  <Member name="Handler" type="DWORD" rva="true"/>
+		  <Member name="Target" type="DWORD" rva="true"/>
+		</Struct>
+		<Struct name="C_SCOPE_TABLE">
+			<Member name="NumEntries" type="DWORD"/>
+			<!--<Member name="Table" type="C_SCOPE_TABLE_ENTRY[0]"/> -->
+		</Struct>
+		<Struct name="GS_HANDLER_DATA">
+		  <Member name="CookieOffset" type="DWORD"/>
+		  <Member name="AlignedBaseOffset" type="DWORD"/>
+		  <Member name="Alignment" type="DWORD"/>
+		</Struct>
+		<Struct name="S_FUNC_INFO">
+		  <Member name="MagicNumber" type="DWORD"/>
+		  <Member name="MaxState" type="DWORD"/>
+		  <Member name="DispUnwindMap" type="DWORD" rva="true"/>
+		  <Member name="TryBlocks" type="DWORD"/>
+		  <Member name="DispTryBlockMap" type="DWORD" rva="true"/>
+		  <Member name="IPMapEntries" type="DWORD"/>
+		  <Member name="DispIPtoStateMap" type="DWORD" rva="true"/>
+		  <Member name="DispUwindHelp" type="DWORD"/>
+		  <Member name="DispESTypeList" type="DWORD"/>
+		  <Member name="EHFlags" type="DWORD"/>
+		</Struct>
+		<Struct name="RUNTIME_FUNCTION">
+		  <Member name="BeginAddress" type="DWORD" rva="FirstThunk:ULONGLONG[0]"/>
+		  <Member name="EndAddress" type="DWORD" rva="FirstThunk:ULONGLONG[0]"/>
+		  <Member name="UnwindInfoAddress" type="DWORD" rva="FirstThunk:ULONGLONG[0]"/>
+		</Struct>
+		<Struct name="IMAGE_LOAD_CONFIG_DIRECTORY32">
+			<Member name="Size" type="DWORD"/>
+			<Member name="TimeDateStamp" type="DWORD"/>
+			<Member name="MajorVersion" type="WORD"/>
+			<Member name="MinorVersion" type="WORD"/>
+			<Member name="GlobalFlagsClear" type="DWORD"/>
+			<Member name="GlobalFlagsSet" type="DWORD"/>
+			<Member name="CriticalSectionDefaultTimeout" type="DWORD"/>
+			<Member name="DeCommitFreeBlockThreshold" type="DWORD"/>
+			<Member name="DeCommitTotalFreeThreshold" type="DWORD"/>
+			<Member name="LockPrefixTable" type="DWORD"/>
+			<Member name="MaximumAllocationSize" type="DWORD"/>
+			<Member name="VirtualMemoryThreshold" type="DWORD"/>
+			<Member name="ProcessHeapFlags" type="DWORD"/>
+			<Member name="ProcessAffinityMask" type="DWORD"/>
+			<Member name="CSDVersion" type="WORD"/>
+			<Member name="Reserved1" type="WORD"/>
+			<Member name="EditList" type="DWORD"/>
+			<Member name="SecurityCookie" type="DWORD"/>
+			<Member name="SEHandlerTable" type="DWORD"/>
+			<Member name="SEHandlerCount" type="DWORD"/>
+			<Member name="GuardCFCheckFunctionPointer" type="DWORD"/>
+			<Member name="Reserved2" type="DWORD"/>
+			<Member name="GuardCFFunctionTable" type="DWORD"/>
+			<Member name="GuardCFFunctionCount" type="DWORD"/>
+			<Member name="GuardFlags" type="DWORD"/>
+		</Struct>
+		<Struct name="IMAGE_LOAD_CONFIG_DIRECTORY64">
+			<Member name="Size" type="DWORD"/>
+			<Member name="TimeDateStamp" type="DWORD"/>
+			<Member name="MajorVersion" type="WORD"/>
+			<Member name="MinorVersion" type="WORD"/>
+			<Member name="GlobalFlagsClear" type="DWORD"/>
+			<Member name="GlobalFlagsSet" type="DWORD"/>
+			<Member name="CriticalSectionDefaultTimeout" type="DWORD"/>
+			<Member name="DeCommitFreeBlockThreshold" type="ULONGLONG"/>
+			<Member name="DeCommitTotalFreeThreshold" type="ULONGLONG"/>
+			<Member name="LockPrefixTable" type="ULONGLONG"/>
+			<Member name="MaximumAllocationSize" type="ULONGLONG"/>
+			<Member name="VirtualMemoryThreshold" type="ULONGLONG"/>
+			<Member name="ProcessHeapFlags" type="ULONGLONG"/>
+			<Member name="ProcessAffinityMask" type="DWORD"/>
+			<Member name="CSDVersion" type="WORD"/>
+			<Member name="Reserved1" type="WORD"/>
+			<Member name="EditList" type="ULONGLONG"/>
+			<Member name="SecurityCookie" type="ULONGLONG"/>
+			<Member name="SEHandlerTable" type="ULONGLONG"/>
+			<Member name="SEHandlerCount" type="ULONGLONG"/>
+			<Member name="GuardCFCheckFunctionPointer" type="ULONGLONG"/>
+			<Member name="Reserved2" type="ULONGLONG"/>
+			<Member name="GuardCFFunctionTable" type="ULONGLONG"/>
+			<Member name="GuardCFFunctionCount" type="ULONGLONG"/>
+			<Member name="GuardFlags" type="DWORD"/>
+		</Struct>
+		<Struct name="IMAGE_SECTION_BODY">
+			<Member name="Data" type="BYTE[32]"/>
+		</Struct>
+		<Struct name="IMAGE_SECTION_HEADER">
+			<Member name="Name" type="BYTE[8]" string="parent"/>
+			<Member name="VirtualSize" type="DWORD"/>
+			<Member name="VirtualAddress" type="DWORD" rva="Section:BYTE[5]"/>
+			<Member name="SizeOfRawData" type="DWORD"/>
+			<Member name="PointerToRawData" type="DWORD"/>
+			<Member name="PointerToRelocations" type="DWORD"/>
+			<Member name="PointerToLinenumbers" type="DWORD"/>
+			<Member name="NumberOfRelocations" type="WORD"/>
+			<Member name="NumberOfLinenumbers" type="WORD"/>
+			<Member name="Characteristics" type="DWORD" enum="IMAGE_SCN_CHARACTERISTICS"/>
+		</Struct>
+	</StructList>
+</FileFormat>

@@ -1,0 +1,3 @@
+#define IDD_DLG_MAIN		 101
+#define IDC_EDT_SAMPLE		1001
+#define IDC_STC_ICON		1002

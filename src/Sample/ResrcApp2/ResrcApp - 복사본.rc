@@ -1,0 +1,70 @@
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Menu
+IDR_YHD_MENU MENU
+BEGIN
+    POPUP "Test(&T)"
+    BEGIN
+        MENUITEM "Show My Cursor(&C)\tShift+C", 	ID_MENU_CHANGECURSOR
+        MENUITEM SEPARATOR
+        POPUP "Background(&B)"
+        BEGIN
+            MENUITEM "Show Bitmap(&S)\tCtrl+S",     ID_MENU_SHOWBITMAP
+            MENUITEM "Remove Bitmap(&R)\tCtrl+R",	ID_MENU_CLEARBITMAP, GRAYED
+        END
+    END
+    MENUITEM "Exit(&E)",                    		ID_MENU_EXIT
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Accelerator
+IDR_YHD_ACCEL ACCELERATORS
+BEGIN
+    "C",	ID_ACCEL_CHANGECURSOR,  VIRTKEY, SHIFT, NOINVERT
+    "S",	ID_ACCEL_SHOWBITMAP,    VIRTKEY, CONTROL, NOINVERT
+    "R",	ID_ACCEL_CLEARBITMAP,   VIRTKEY, CONTROL, NOINVERT
+    "E",	ID_ACCEL_EXIT,          VIRTKEY, ALT, NOINVERT
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Bitmap
+IDR_YHD_BITMAP	BITMAP	"ResrcApp.bmp"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Bitmap
+IDR_YHD_ICON	ICON	"ResrcApp.ico"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Cursor
+IDR_YHD_CURSOR	CURSOR	"ResrcApp.cur"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// String Table
+STRINGTABLE
+BEGIN
+	IDS_TEXT_MSG64	"YHD's WinApp : HINSTANCE=0x%016I64X"
+	IDS_TEXT_MSG32	"YHD's WinApp : HINSTANCE=0x%08X"
+	IDS_QUESTION	"Do you want to end this program?"
+END
+STRINGTABLE
+BEGIN
+    IDS_TEST01		"ID => 112"
+    IDS_TEST02		"ID => 113"
+END
+STRINGTABLE
+BEGIN
+    IDS_FAIL_REGISTER_CLASS	"RegisterClassEx FAILED!!!"
+    IDS_FAIL_CREATE_WINDOW	"CreateWindowEx FAILED!!!"
+END
+/////////////////////////////////////////////////////////////////////////////

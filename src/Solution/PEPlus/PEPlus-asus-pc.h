@@ -1,0 +1,310 @@
+#pragma once
+#include <string>
+typedef CAtlString String;
+
+#define IS_VALID_RVA(rva)		(rva > 0 && rva < 0x7FFFFFFF)
+#define RVA_IN_SECT(psh, rva)	(((rva) >= (psh)->VirtualAddress) && \
+								 ((rva) <  (psh)->VirtualAddress + (psh)->SizeOfRawData))
+#define RVA_IN_DIR(pdd, rva)	(((rva) >= (pdd)->VirtualAddress) && \
+								 ((rva) <  (pdd)->VirtualAddress + (pdd)->Size))
+#define	RVA_TO_OFFSET(psh, rva)	((rva) - (psh)->VirtualAddress + (psh)->PointerToRawData)
+#define	OFFSET_TO_RVA(psh, off)	((off) + (psh)->VirtualAddress - (psh)->PointerToRawData)
+#define	VA64_TO_RVA(va, base)	((DWORD)(UINT64(va) - UINT64(base)))
+#define	VA32_TO_RVA(va, base)	(DWORD(va) - DWORD(base))
+#ifdef _WIN64
+#define	VA_TO_RVA(va, base) VA64_TO_RVA(va, base)
+#else
+#define	VA_TO_RVA(va, base) VA32_TO_RVA(va, base)
+#endif
+#define INVALID_SECT_IDX	((short)-1)
+
+#define ROUND_UP(v, u)	(((v) + (u-1)) & ~(u-1))
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//IMAGE_DEBUG_MISC, *PIMAGE_DEBUG_MISC;
+#define IMAGE_PDB_SIGNATURE 0x53445352	// RSDS
+typedef struct _IMAGE_PDB_INFO
+{
+	DWORD	Signature;
+	BYTE	Guid[16];
+	DWORD	Age;
+	CHAR	PdbFileName[1];
+} IMAGE_PDB_INFO, *PIMAGE_PDB_INFO;
+
+#define IMAGE_DEBUG_TYPE_FEATURE  (IMAGE_DEBUG_TYPE_CLSID + 1)
+typedef struct _IMAGE_FEATURE_INFO
+{
+	DWORD	Pre_Vcpp;
+	DWORD	C_Cpp;
+	DWORD	GS;
+	DWORD	SDL;
+	DWORD	Reserved;
+} IMAGE_FEATURE_INFO, *PIMAGE_FEATURE_INFO;
+
+#define IMAGE_DEBUG_TYPE_POGO  (IMAGE_DEBUG_TYPE_CLSID + 2)
+typedef struct _IMAGE_PGO_ITEM
+{
+	DWORD	PGORva;
+	DWORD	PGOSize;
+	CHAR	PGOName[1];
+} IMAGE_PGO_ITEM, *PIMAGE_PGO_ITEM;
+
+#define IMAGE_POGO_SIGNATURE 0x50475500	//PGU\0
+typedef struct _IMAGE_POGO_INFO
+{
+	DWORD	Signature;
+} IMAGE_POGO_INFO, *PIMAGE_POGO_INFO;
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#ifdef _M_IX86
+typedef struct _IMAGE_RUNTIME_FUNCTION_ENTRY RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
+typedef SCOPE_TABLE_AMD64 SCOPE_TABLE, *PSCOPE_TABLE;
+
+#define UNW_FLAG_NHANDLER       0x0
+#define UNW_FLAG_EHANDLER       0x1
+#define UNW_FLAG_UHANDLER       0x2
+#define UNW_FLAG_CHAININFO      0x4
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+#define UWOP_PUSH_NONVOL		 0	// 1 node
+#define UWOP_ALLOC_LARGE		 1	// 2 or 3 nodes
+#define UWOP_ALLOC_SMALL		 2	// 1 node
+#define UWOP_SET_FPREG			 3	// 1 node
+#define UWOP_SAVE_NONVOL		 4	// 2 nodes
+#define UWOP_SAVE_NONVOL_FAR	 5	// 3 nodes
+#define UWOP_SAVE_XMM128		 8	// 2 nodes
+#define UWOP_SAVE_XMM128_FAR	 9	// 3 nodes
+#define UWOP_PUSH_MACHFRAME		10	// 1 node
+
+typedef union _UNWIND_CODE
+{
+	struct
+	{
+		BYTE CodeOffset;	// Offset in prolog
+		BYTE UnwindOp : 4;	// Unwind operation code
+		BYTE OpInfo : 4;	// Operation info
+	};
+	WORD FrameOffset;
+} UNWIND_CODE, *PUNWIND_CODE;
+
+typedef struct _UNWIND_INFO
+{
+	BYTE Version : 3, Flags : 5;
+	BYTE SizeOfProlog;
+	BYTE CountOfCodes;
+	BYTE FrameRegister : 4, FrameOffset : 4;
+	UNWIND_CODE UnwindCode[1];
+	/*  UNWIND_CODE MoreUnwindCode[((CountOfCodes + 1) & ~1) - 1];
+	*   union {
+	*       OPTIONAL ULONG ExceptionHandler;
+	*       OPTIONAL ULONG FunctionEntry;
+	*   };
+	*   OPTIONAL ULONG ExceptionData[]; */
+} UNWIND_INFO, *PUNWIND_INFO;
+
+
+typedef struct _C_SCOPE_TABLE_ENTRY
+{
+	ULONG BeginAddress;
+	ULONG EndAddress;
+	ULONG HandlerAddress;
+	ULONG JumpTarget;
+} C_SCOPE_TABLE_ENTRY, *PC_SCOPE_TABLE_ENTRY;
+//SCOPE_TABLE_AMD64;
+
+typedef struct _C_SCOPE_TABLE
+{
+	ULONG Count;
+	C_SCOPE_TABLE_ENTRY Table[1];
+} C_SCOPE_TABLE, *PC_SCOPE_TABLE;
+
+typedef struct _GS_HANDLER_DATA
+{
+	union
+	{
+		union
+		{
+			ULONG EHandler : 1;
+			ULONG UHandler : 1;
+			ULONG HasAlignment : 1;
+		} Bits;
+		LONG CookieOffset;
+	} u;
+	ULONG AlignedBaseOffset;
+	ULONG Alignment;
+} GS_HANDLER_DATA, *PGS_HANDLER_DATA;
+
+
+typedef struct _s_FuncInfo
+{
+	int magicNumber; // 0x19930522
+	int maxState; // number of states in unwind map
+	int dispUnwindMap; // RVA of the unwind map
+	unsigned int nTryBlocks; // count of try blocks
+	int dispTryBlockMap; // RVA of the try block array 
+	unsigned int nIPMapEntries; // count of IP-to-state entries
+	int dispIPtoStateMap; // RVA of the IP-to-state array
+	int dispUwindHelp; // rsp offset of the state var
+	// (initialized to -2; used during unwinding)
+	int dispESTypeList; // list of exception spec types
+	int EHFlags; // flags
+} S_FUNC_INFO;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class PEPlus
+{
+public:
+	static String GetErrMsg(HRESULT hr);
+	static String GetAddrForm(bool bIs32, PBYTE pAddr);
+	static PBYTE AddrStr2Value(bool bIs32, PCWSTR szAddr);
+	static String Size2Units(UINT64 llize);
+	static String Val2CommaStr(UINT64 llize);
+	static String Int2TimeStr(DWORD dwVal);
+	static String Bin2GuidStr(PBYTE pBin);
+
+	static bool IsDosSigniture(PBYTE pImgBase);
+	static bool IsNTSigniture(PBYTE pImgBase);
+	static bool Is32bitPE(PBYTE pImgBase);
+	static int GetNumOfSections(PBYTE pImgBase);
+	static DWORD64 GetImageBase(PBYTE pImgBase);
+	static DWORD GetAddressOfEntryPoint(PBYTE pImgBase);
+	static bool HasDirEntry(PBYTE pImgBase, int nEntryIdx);
+
+
+	static PIMAGE_FILE_HEADER GetFileHdr(PBYTE pImgBase);
+	static PIMAGE_OPTIONAL_HEADER32 GetOptHdr32(PBYTE pImgBase);
+	static PIMAGE_OPTIONAL_HEADER64 GetOptHdr64(PBYTE pImgBase);
+	static PBYTE GetOptHdr(PBYTE pImgBase);
+	static PIMAGE_DATA_DIRECTORY GetDataDirs(PBYTE pImgBase);
+	static PIMAGE_DATA_DIRECTORY GetDataDir(PBYTE pImgBase, int nDirId);
+	static PIMAGE_SECTION_HEADER GetSectHdrs(PBYTE pImgBase);
+	static PIMAGE_SECTION_HEADER FindSectHdr(PBYTE pImgBase, PSTR pszName);
+	static PIMAGE_SECTION_HEADER FindSectHdr(PBYTE pImgBase, DWORD dwRVA);
+	static PIMAGE_SECTION_HEADER FindSectHdrAndIdx(PBYTE pImgBase, DWORD dwOffset, short& nSectIdx);
+	static PIMAGE_SECTION_HEADER FindSectHdrOffset(PBYTE pImgBase, DWORD dwOffset);
+	static short GetSectionIdx(PBYTE pImgBase, DWORD dwRVA);
+	static String GetSectionName(PIMAGE_SECTION_HEADER psh);
+
+	static DWORD CalcSizeOfPEImage(PBYTE pImgBase);
+	static PIMAGE_SECTION_HEADER FindCodeSection(PBYTE pImgBase, WORD& wStartIdx);
+	static PIMAGE_IMPORT_DESCRIPTOR ImportDirectoryOffset(PVOID pMapView);
+	static PIMAGE_SECTION_HEADER IDSectionHeaderOffset(PVOID pMapView);
+
+	static PIMAGE_PDB_INFO GetPdbInfo(PBYTE pImgBase, DWORD* pdwTimeStamp = NULL);
+	static String GetPdbPath(PIMAGE_PDB_INFO ppdb, bool& bCached);
+	static String GetPdbPath(PBYTE pImgBase, bool& bCached, PIMAGE_PDB_INFO* pppdb = NULL);
+	static String RetrieveModuleName(HANDLE hFile);
+	static String GetModNameFromIAT(PBYTE pImgBase, DWORD dwRVA, bool* pbBound = NULL);
+	static String GetFuncNameFromIAT(PBYTE pImgBase, DWORD dwRVA);
+
+	static int BaseRelocation(PBYTE pImgBase, DWORD64 llNewBase);
+	static FARPROC GetFuncPtrFromModule(HINSTANCE hMod, PCSTR pszSymbol);
+	static bool SetFuncPtrToIAT(PCSTR pszRepDllName, FARPROC pfnCurFunc, FARPROC pfnNewFunc, HINSTANCE hModInst);
+	static PBYTE FindPEResource(DWORD& dwSize, PBYTE pImgBase, PCWSTR pszName, PCWSTR pszType, WORD wLang = 0xFFFF);
+
+
+	static HMODULE FindModuleInSnapshot(PCWSTR pszDllName, DWORD dwProcId);
+	static HRESULT InjectModule(DWORD dwProcessId, PCTSTR pszLibFile);
+	static HRESULT EjectModule(DWORD dwProcessId, PCTSTR pszLibFile);
+};
+
+#define GET_NT_OFFSET(ib)	(PIMAGE_DOS_HEADER(ib)->e_lfanew)
+#define GET_NT_HDRPTR(ib)	((PBYTE)(ib) + PIMAGE_DOS_HEADER(ib)->e_lfanew)
+
+inline bool PEPlus::IsDosSigniture(PBYTE pImgBase)
+{
+	return (*PWORD(pImgBase) == IMAGE_DOS_SIGNATURE);
+}
+
+inline bool PEPlus::IsNTSigniture(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	return (pnh->Signature == IMAGE_NT_SIGNATURE);
+}
+
+inline bool PEPlus::Is32bitPE(PBYTE pImgBase)
+{
+	return (*((PWORD)GetOptHdr(pImgBase)) == IMAGE_NT_OPTIONAL_HDR32_MAGIC);
+}
+
+inline int PEPlus::GetNumOfSections(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	return (int)pnh->FileHeader.NumberOfSections;
+}
+
+inline PIMAGE_FILE_HEADER PEPlus::GetFileHdr(PBYTE pImgBase)
+{
+	return PIMAGE_FILE_HEADER(GET_NT_HDRPTR(pImgBase) + sizeof(DWORD));
+}
+
+inline PIMAGE_OPTIONAL_HEADER32 PEPlus::GetOptHdr32(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS32 pnh = (PIMAGE_NT_HEADERS32)GET_NT_HDRPTR(pImgBase);
+	return &pnh->OptionalHeader;
+}
+
+inline PIMAGE_OPTIONAL_HEADER64 PEPlus::GetOptHdr64(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS64 pnh = (PIMAGE_NT_HEADERS64)GET_NT_HDRPTR(pImgBase);
+	return &pnh->OptionalHeader;
+}
+
+inline PBYTE PEPlus::GetOptHdr(PBYTE pImgBase)
+{
+	return (GET_NT_HDRPTR(pImgBase) + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER));
+}
+
+inline PIMAGE_DATA_DIRECTORY PEPlus::GetDataDirs(PBYTE pImgBase)
+{
+	PIMAGE_FILE_HEADER pfh = PIMAGE_FILE_HEADER(GET_NT_HDRPTR(pImgBase) + sizeof(DWORD));
+	return PIMAGE_DATA_DIRECTORY(PBYTE(pfh) +
+		sizeof(IMAGE_FILE_HEADER) + pfh->SizeOfOptionalHeader -
+		IMAGE_NUMBEROF_DIRECTORY_ENTRIES * sizeof(IMAGE_DATA_DIRECTORY));
+}
+
+inline PIMAGE_DATA_DIRECTORY PEPlus::GetDataDir(PBYTE pImgBase, int nDirId)
+{
+	PIMAGE_DATA_DIRECTORY pdds = GetDataDirs(pImgBase);
+	return &pdds[nDirId];
+}
+
+inline bool PEPlus::HasDirEntry(PBYTE pImgBase, int nDirId)
+{
+	PIMAGE_DATA_DIRECTORY pdds = GetDataDirs(pImgBase);
+	return (pdds[nDirId].VirtualAddress != 0);
+}
+
+inline PIMAGE_SECTION_HEADER PEPlus::GetSectHdrs(PBYTE pImgBase)
+{
+	PIMAGE_FILE_HEADER pfh = PIMAGE_FILE_HEADER(GET_NT_HDRPTR(pImgBase) + sizeof(DWORD));
+	return PIMAGE_SECTION_HEADER(PBYTE(pfh) +
+		sizeof(IMAGE_FILE_HEADER) + pfh->SizeOfOptionalHeader);
+}
+
+inline DWORD64 PEPlus::GetImageBase(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	if (Is32bitPE(pImgBase))
+		return ((PIMAGE_OPTIONAL_HEADER32)&pnh->OptionalHeader)->ImageBase;
+	else
+		return ((PIMAGE_OPTIONAL_HEADER64)&pnh->OptionalHeader)->ImageBase;
+}
+
+inline DWORD PEPlus::GetAddressOfEntryPoint(PBYTE pImgBase)
+{
+	PIMAGE_NT_HEADERS pnh = (PIMAGE_NT_HEADERS)GET_NT_HDRPTR(pImgBase);
+	if (Is32bitPE(pImgBase))
+		return ((PIMAGE_OPTIONAL_HEADER32)&pnh->OptionalHeader)->AddressOfEntryPoint;
+	else
+		return ((PIMAGE_OPTIONAL_HEADER64)&pnh->OptionalHeader)->AddressOfEntryPoint;
+}

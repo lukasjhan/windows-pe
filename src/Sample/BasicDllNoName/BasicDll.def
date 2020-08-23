@@ -1,0 +1,5 @@
+LIBRARY     BasicDllNoName
+EXPORTS
+	YHD3_DrawText		@3 NONAME
+	YHD6_CalcTextWidth	@6 NONAME
+	YHD7_IsPointInRect	@7

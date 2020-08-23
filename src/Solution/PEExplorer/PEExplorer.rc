@@ -1,0 +1,568 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#include "verrsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "#include ""verrsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#include ""res\\PEExplorer.rc2""  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.\r\n"
+    "#include ""l.KOR\\afxres.rc""      // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\PEExplorer.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDB_TREE_NODE           BITMAP                  "res\\PEExplorer.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 15
+BEGIN
+    BUTTON      ID_FILE_OPEN
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "PE 파일 열기\tCtrl+O(&O)",        ID_FILE_OPEN
+        MENUITEM "PE 파일 닫기\tCtrl+C(&C)",        ID_FILE_CLOSE
+        MENUITEM SEPARATOR
+        MENUITEM "설정",                          32779
+        MENUITEM SEPARATOR
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소(&U)\tCtrl+Z",           ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기(&T)\tCtrl+X",            ID_EDIT_CUT
+        MENUITEM "복사(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "붙여넣기(&P)\tCtrl+V",            ID_EDIT_PASTE
+    END
+    POPUP "보기(&V)"
+    BEGIN
+        MENUITEM "도구 모음(&T)",                   ID_VIEW_TOOLBAR
+        MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "PEExplorer 정보(&A)...",        ID_APP_ABOUT
+    END
+END
+
+IDR_MENU_POPUP MENU
+BEGIN
+    POPUP "팝업메뉴"
+    BEGIN
+        MENUITEM "헥사 덤프",                       IDM_HEXA_VIEW
+        POPUP "항목 복사"
+        BEGIN
+            MENUITEM "모두",                          IDM_LVI_COPY_ALL
+            MENUITEM SEPARATOR
+            MENUITEM "필드",                          IDM_LVI_COPY_FIELD
+            MENUITEM "타입",                          IDM_LVI_COPY_TYPE
+            MENUITEM "오프셋",                         IDM_LVI_COPY_OFFSET
+            MENUITEM "크기",                          IDM_LVI_COPY_SIZE
+            MENUITEM "값",                           IDM_LVI_COPY_VALUE
+            MENUITEM "정보",                          IDM_LVI_COPY_INFO
+        END
+        MENUITEM "데이터 복사",                      IDM_COPY_DUMP
+        MENUITEM "상세 보기",                       IDM_VIEW_DETAIL
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PEExplorer 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "PEExplorer, 버전 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2015",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_HEXA_VIEW DIALOGEX 0, 0, 359, 303
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "헥사 덤프"
+FONT 9, "Courier New", 400, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_EDT_HEXA,7,18,345,278,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT_COLUMN,7,7,345,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_CODE_VIEW DIALOGEX 0, 0, 595, 287
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "코드 보기"
+FONT 9, "Courier New", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LV_DATA,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,581,273
+END
+
+IDD_DATA_VIEW DIALOGEX 0, 0, 429, 268
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "데이터 보기"
+FONT 9, "Courier New", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LV_DATA,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,415,254
+END
+
+IDD_RES_DLG DIALOGEX 0, 0, 421, 206
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "대화상자 분석"
+FONT 9, "Courier New", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,365,185,50,14
+    PUSHBUTTON      "리소스 파싱",IDC_BTN_SHOW_PARSE,7,185,50,14
+    PUSHBUTTON      "API 실행",IDC_BTN_SHOW_DIALOG,64,185,50,14
+    CONTROL         "",IDC_LV_CTRL,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,108,408,74,WS_EX_STATICEDGE
+    LTEXT           " 자식 컨트롤 리스트",IDC_STATIC,7,97,408,11,SS_CENTERIMAGE | SS_SUNKEN
+    GROUPBOX        "대화상자 정보",IDC_GRP_DLG,7,7,408,86
+    RTEXT           "(x, y)",IDC_STATIC,15,38,19,11,SS_CENTERIMAGE
+    CTEXT           "",IDC_STC_XY,37,38,59,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "(w, h)",IDC_STATIC,110,38,20,11,SS_CENTERIMAGE
+    CTEXT           "",IDC_STC_WH,134,38,59,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "스타일",IDC_STATIC,229,39,25,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_STYLE,257,39,48,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "확장스타일",IDC_STATIC,312,39,43,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_STYLEEX,358,39,48,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "메뉴",IDC_STATIC,181,18,17,11,SS_CENTERIMAGE
+    LTEXT           "",IDC_STC_MENU,203,18,80,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "클래스",IDC_STATIC,293,18,25,11,SS_CENTERIMAGE
+    LTEXT           "",IDC_STC_CLASS,321,18,85,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "캡션",IDC_STATIC,15,18,17,11,SS_CENTERIMAGE
+    LTEXT           "",IDC_STC_CAPTION,37,18,134,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "포인트크기",IDC_STATIC,24,66,44,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_POINT,72,66,37,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "강조",IDC_STATIC,139,66,20,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_WEIGHT,163,66,37,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "이탤릭",IDC_STATIC,230,66,25,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_ITALYC,258,66,37,11,SS_CENTERIMAGE | SS_SUNKEN
+    RTEXT           "문자코드",IDC_STATIC,316,66,35,11,SS_CENTERIMAGE
+    RTEXT           "",IDC_STC_CHAR,355,66,37,11,SS_CENTERIMAGE | SS_SUNKEN
+    GROUPBOX        "폰트",IDC_GRP_FONT,17,52,389,34
+END
+
+IDD_RES_MENU DIALOGEX 0, 0, 323, 129
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "메뉴 분석"
+FONT 9, "Courier New", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_TV_MENU,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_SHOWSELALWAYS | WS_HSCROLL | WS_TABSTOP,7,7,158,113,WS_EX_STATICEDGE
+    PUSHBUTTON      "메인 메뉴",IDC_BTN_SHOW_MAIN,167,108,74,14
+    PUSHBUTTON      "팝업 메뉴",IDC_BTN_SHOW_POPUP,242,108,74,14
+    EDITTEXT        IDC_EDT_INFO,168,21,148,86,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+    CTEXT           "메뉴 항목 정보",IDC_STATIC,168,7,148,12,SS_CENTERIMAGE | SS_SUNKEN
+END
+
+IDD_RES_BITMAP DIALOGEX 0, 0, 341, 281
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "비트맵 분석"
+FONT 9, "Courier New", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_STC_SHOWBMP,"Static",SS_BLACKFRAME,7,60,327,214,WS_EX_TRANSPARENT
+    CONTROL         "",IDC_LV_BMPINFO,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,143,50
+END
+
+IDD_RES_STR_TBL DIALOGEX 0, 0, 289, 86
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "문자열 테이블 분석"
+FONT 9, "Courier New", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,232,65,50,14
+    CONTROL         "",IDC_LV_STRTBL,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_TABSTOP,7,7,276,53,WS_EX_STATICEDGE
+    LTEXT           "리소스 ID ",IDC_STATIC,7,65,36,14,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDT_RESID,50,65,52,14,ES_RIGHT | ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
+END
+
+IDD_RES_ACCEL_TBL DIALOGEX 0, 0, 289, 99
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "가속기 테이블 분석"
+FONT 9, "Courier New", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LV_ACCELTBL,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,276,85,WS_EX_STATICEDGE
+END
+
+IDD_RES_VER_INFO DIALOGEX 0, 0, 289, 176
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "버전 정보 분석"
+FONT 9, "Courier New", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LV_ACCELTBL,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,276,162,WS_EX_STATICEDGE
+END
+
+IDD_SECU_VIEW DIALOGEX 0, 0, 275, 123
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PKCS#7 정보"
+FONT 9, "Courier New", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LV_ACCELTBL,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,261,109,WS_EX_STATICEDGE
+END
+
+IDD_FIND_ITEM DIALOGEX 0, 0, 227, 75
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "검색",IDOK,111,54,50,14
+    PUSHBUTTON      "취소",IDCANCEL,170,54,50,14
+    EDITTEXT        IDC_EDT_FIND,46,7,174,14,ES_AUTOHSCROLL
+    LTEXT           "찾을 내용:",IDC_STATIC,7,9,35,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,0,0,10
+ PRODUCTVERSION 2,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041204b0"
+        BEGIN
+            VALUE "CompanyName", "YHD Works Co."
+            VALUE "FileDescription", "PEExplorer"
+            VALUE "FileVersion", "2.0.0.10"
+            VALUE "InternalName", "PEExplorer.exe"
+            VALUE "LegalCopyright", "YHD Works Co.  All rights reserved."
+            VALUE "OriginalFilename", "PEExplorer.exe"
+            VALUE "ProductName", "PE Explorer"
+            VALUE "ProductVersion", "2.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_HEXA_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 352
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 296
+    END
+
+    IDD_CODE_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 588
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 280
+    END
+
+    IDD_DATA_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 422
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 261
+    END
+
+    IDD_RES_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 414
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 199
+    END
+
+    IDD_RES_MENU, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 316
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_RES_BITMAP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 334
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 274
+    END
+
+    IDD_RES_STR_TBL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 282
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 79
+    END
+
+    IDD_RES_ACCEL_TBL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 282
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_SECU_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 268
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 116
+    END
+
+    IDD_FIND_ITEM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 220
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 68
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XML
+//
+
+IDR_PE_FORMAT           XML                     "res\\PEFormat.xml"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "PEExplorer"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "PEExplorer"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호 및 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모두 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_TOOLBAR         "도구 모음을 표시하거나 숨깁니다.\n도구 모음 설정/해제"
+    ID_VIEW_STATUS_BAR      "상태 표시줄을 표시하거나 숨깁니다.\n상태 표시줄 설정/해제"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록을 활성화합니다."
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#include "res\PEExplorer.rc2"  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.
+#include "l.KOR\afxres.rc"      // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

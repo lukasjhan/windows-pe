@@ -1,0 +1,6 @@
+LIBRARY     BasicDllMD
+EXPORTS
+	YHD3_DrawText		@3
+	YHD6_CalcTextWidth	@6
+	YHD7_IsPointInRect	@7
+	YHD4_MSG_BUFF		@4	DATA

@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일\XML">
+      <UniqueIdentifier>{24f6f992-c7f7-4d70-a8b3-62689314cb48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\ICO">
+      <UniqueIdentifier>{afe62e6d-c70d-403e-b24d-bd941ce900b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\BMP">
+      <UniqueIdentifier>{09ef3c10-a81c-47ba-9b2e-6996f8a3a79c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1.Debug">
+      <UniqueIdentifier>{e5a27b99-e588-484b-ae6b-a0c62a8f1e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3.Views">
+      <UniqueIdentifier>{99d65aa8-2ab5-4a5a-926b-69889d58424e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0.Main">
+      <UniqueIdentifier>{be52b48c-0336-46f5-a82a-d64260b24031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="9.Misc">
+      <UniqueIdentifier>{c5a209a6-9f23-4ed8-b5bc-fb2b03bca251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4.Dialogs">
+      <UniqueIdentifier>{be421ee3-d621-4b37-841a-40297ab8f34a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2.Dockables">
+      <UniqueIdentifier>{dfd4d632-fbfd-4205-ae6b-ca4aac58394c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2.Dockables\Manage">
+      <UniqueIdentifier>{56d86606-5fb5-4be5-861c-ef8efe4081c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2.Dockables\Debug">
+      <UniqueIdentifier>{77a3cf05-9e30-440e-a69c-ee65bddb45ed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PESchema.h">
+      <Filter>1.Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEWrapCtrl.h">
+      <Filter>2.Dockables</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>9.Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>9.Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>9.Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="PEView.DAsm.h">
+      <Filter>3.Views</Filter>
+    </ClInclude>
+    <ClInclude Include="PEView.Src.h">
+      <Filter>3.Views</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassView.h">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.Project.h">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.Module.h">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.Output.h">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.Regstr.h">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.Thread.h">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEView.Html.h">
+      <Filter>3.Views</Filter>
+    </ClInclude>
+    <ClInclude Include="PEView.VMem.h">
+      <Filter>3.Views</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.BookMark.h">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClInclude>
+    <ClInclude Include="PEApp.h">
+      <Filter>0.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDoc.h">
+      <Filter>1.Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.CallStack.h">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.EnvConfig.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.MemDump.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.NewDbgPrj.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.ProcList.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.ExceptInfo.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDlg.SimpleInput.h">
+      <Filter>4.Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDoc.Types.h">
+      <Filter>1.Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PEChild.h">
+      <Filter>0.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PEFrame.h">
+      <Filter>0.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PEDock.BreakPnt.h">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PESchema.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEWrapCtrl.cpp">
+      <Filter>2.Dockables</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>9.Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.DAsm.cpp">
+      <Filter>3.Views</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.Src.cpp">
+      <Filter>3.Views</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassView.cpp">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.Project.cpp">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.Module.cpp">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.Output.cpp">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.Regstr.cpp">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.Thread.cpp">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.Html.cpp">
+      <Filter>3.Views</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.VMem.cpp">
+      <Filter>3.Views</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.BookMark.cpp">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClCompile>
+    <ClCompile Include="PEApp.cpp">
+      <Filter>0.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDoc.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDoc.Debug.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDoc.Util.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDoc.Code.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.CallStack.cpp">
+      <Filter>2.Dockables\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.EnvConfig.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.MemDump.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.NewDbgPrj.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.ProcList.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.ExceptInfo.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEView.DAsm.More.cpp">
+      <Filter>3.Views</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDlg.SimpleInput.cpp">
+      <Filter>4.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="PEChild.cpp">
+      <Filter>0.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PEFrame.cpp">
+      <Filter>0.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDoc.Types.cpp">
+      <Filter>1.Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PEDock.BreakPnt.cpp">
+      <Filter>2.Dockables\Manage</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PEFrontier.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\class_view.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\class_view_hc.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\file_view.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\file_view_hc.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\output_wnd.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\output_wnd_hc.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\PEFrontier.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\properties_wnd.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\properties_wnd_hc.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\PEFrontierDoc.ico">
+      <Filter>리소스 파일\ICO</Filter>
+    </Image>
+    <Image Include="res\classview.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\classview_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\explorer.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\explorer_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\fileview.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\fileview_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\menuimages.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\menuimages_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\properties.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\properties_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\sort.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\sort_hc.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="UserImages.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\DebugBreak.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PEDock.Thread.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PEDock.Module.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PETool.Debug.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PEView.VMem.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PEDock.PrjMng.bmp">
+      <Filter>리소스 파일\BMP</Filter>
+    </Image>
+    <Image Include="res\PEDock.Break.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\PETool.Explorer.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\PEDock.BookMark.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\PEFrontier.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="res\PEHtmlView.html">
+      <Filter>리소스 파일\XML</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="res\PEFormat.xml">
+      <Filter>리소스 파일\XML</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

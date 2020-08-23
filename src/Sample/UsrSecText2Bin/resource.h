@@ -1,0 +1,2 @@
+#define IDR_BIN_VIEW64	101
+#define IDR_BIN_VIEW32	102

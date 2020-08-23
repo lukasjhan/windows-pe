@@ -1,0 +1,132 @@
+#include <windows.h>
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Menu
+IDR_YHD_MENU MENU
+BEGIN
+    POPUP "Test(&T)"
+    BEGIN
+        MENUITEM "Show My Cursor(&C)\tShift+C", 	ID_MENU_CHANGECURSOR, CHECKED
+		MENUITEM "Dialog Test(&D)\tShift+D",		ID_MENU_DIALOG
+        MENUITEM SEPARATOR
+        POPUP "Background(&B)"
+        BEGIN
+            MENUITEM "Show Bitmap(&S)\tCtrl+S",     ID_MENU_SHOWBITMAP
+            MENUITEM "Remove Bitmap(&R)\tCtrl+R",	ID_MENU_CLEARBITMAP, GRAYED
+        END
+    END
+    MENUITEM "Exit(&E)",                    		ID_MENU_EXIT
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Accelerator
+IDR_YHD_ACCEL ACCELERATORS
+BEGIN
+    "C",	ID_ACCEL_CHANGECURSOR,  VIRTKEY, SHIFT, NOINVERT
+	"D",	ID_ACCEL_DIALOG,		VIRTKEY, SHIFT, NOINVERT
+	"S",	ID_ACCEL_SHOWBITMAP,	VIRTKEY, CONTROL, NOINVERT
+    "R",	ID_ACCEL_CLEARBITMAP,   VIRTKEY, CONTROL, NOINVERT
+    "E",	ID_ACCEL_EXIT,          VIRTKEY, ALT, NOINVERT
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Bitmap
+IDR_YHD_BITMAP	BITMAP	"ResrcApp.bmp"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Bitmap
+IDR_YHD_ICON	ICON	"ResrcApp.ico"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Cursor
+IDR_YHD_CURSOR	CURSOR	"ResrcApp.cur"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CSV
+IDR_YHD_CSV		CSV		"MovieList.csv"
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// String Table
+STRINGTABLE
+BEGIN
+	IDS_TEXT_MSG64	"YHD's WinApp : HINSTANCE=0x%016I64X"
+	IDS_TEXT_MSG32	"YHD's WinApp : HINSTANCE=0x%08X"
+	IDS_QUESTION	"Do you want to end this program?"
+    IDS_TEST01		"ID => 112"
+    IDS_TEST02		"ID => 113"
+    IDS_FAIL_REGISTER_CLASS	"RegisterClassEx FAILED!!!"
+    IDS_FAIL_CREATE_WINDOW	"CreateWindowEx FAILED!!!"
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Dialog
+IDR_YHD_DIALOG DIALOGEX 100, 100, 194, 116
+STYLE	DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION	"ResrcApp Dialog"
+FONT	9, "¸¼Àº °íµñ", 400, 1, 0x81
+BEGIN
+	DEFPUSHBUTTON	"OK", IDOK, 147, 98, 43, 14
+	ICON			IDR_YHD_ICON, IDC_STATIC, 4, 4, 18, 21
+	EDITTEXT		IDC_EDIT_VIEW, 29, 4, 161, 12,
+					ES_RIGHT | ES_AUTOHSCROLL | ES_WANTRETURN | ES_NUMBER
+	CONTROL			"", IDC_LIST_VIEW, "SysListView32",
+					LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+					4, 31, 186, 61
+	CONTROL			"", IDC_PROGRESSIVE, "msctls_progress32",
+					WS_BORDER, 29, 17, 161, 9
+	CONTROL			"", IDC_SLIDE_BAR, "msctls_trackbar32",
+					TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 4, 99, 137, 13
+END
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Version
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION		2, 5, 6, 1
+PRODUCTVERSION	2, 5, 0, 1
+FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+FILEFLAGS 0x1L
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS 0x40004L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "041204B0"
+		BEGIN
+			VALUE "CompanyName", "YHD Works Co."
+			VALUE "FileDescription", "Test program for analysis about resource section."
+			VALUE "FileVersion", "2.5.6.1"
+			VALUE "InternalName", "ResrcApp.exe"
+			VALUE "LegalCopyright", "YHD Works Co. Ltd, All rights reserved."
+			VALUE "OriginalFilename", "ResrcApp.exe"
+			VALUE "ProductName", "Resource Sample App"
+			VALUE "ProductVersion", "2.5.0.1"
+		END
+	END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x412, 1200
+	END
+END
+/////////////////////////////////////////////////////////////////////////////
